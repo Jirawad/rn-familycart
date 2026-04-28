@@ -17,17 +17,24 @@ Manage groceries together, effortlessly. **FamilyCart** เป็นแอปพ
 ### 🚀 Getting Started
 | Splash Screen | Join Family | Create Family |
 |---|---|---|
-| ![Splash Screen](./shop1.png) | ![Join Family](./shop2.jpg) | ![Create Family](./shop4.jpg) |
+| ![Splash Screen](<img width="585" height="1266" alt="shop1" src="https://github.com/user-attachments/assets/ec6846c0-81db-459d-bdc7-5f0f5ee6e92d" />
+) | ![Join Family](<img width="585" height="1266" alt="shop2" src="https://github.com/user-attachments/assets/4dcf2a33-447b-41db-9871-912ddf36c465" />
+) | ![Create Family](<img width="585" height="1266" alt="shop4" src="https://github.com/user-attachments/assets/9fbea86c-8688-4722-896e-d7ffc5fb4516" />
+) |
 
 ### 🏠 Main Features (Light Mode)
 | Grocery List | Add New Item | Filter & Manage |
 |---|---|---|
-| ![List](./shop5.png) | ![Add Item](./shop6.png) | ![Manage](./shop5.png) |
+| ![List](<img width="585" height="1266" alt="shop5" src="https://github.com/user-attachments/assets/d33feda6-b495-4636-b52b-1e7418f0a445" />) 
+| ![Add Item](<img width="585" height="1266" alt="shop6" src="https://github.com/user-attachments/assets/84dfac90-c3d8-45f7-856d-a8dcadb062e3" />) 
+| ![Manage](<img width="585" height="1266" alt="shop5" src="https://github.com/user-attachments/assets/edf9a283-3c31-42c3-b5c2-888f0c9a232b" />) |
 
 ### 🌙 Dark Mode Experience
 | Dark Login | Dark Main List |
 |---|---|
-| ![Dark Login](./shop3.png) | ![Dark List](./shop7.png) |
+| ![Dark Login](<img width="585" height="1266" alt="shop3" src="https://github.com/user-attachments/assets/720e54d5-798b-4f5f-888d-f22a252a8548" />
+) | ![Dark List](<img width="585" height="1266" alt="shop7" src="https://github.com/user-attachments/assets/d48a6478-faaf-4186-b84b-16eb611b14f0" />
+) |
 
 ---
 
