@@ -1,50 +1,38 @@
-# Welcome to your Expo app 👋
+# 🛒 FamilyCart 
+### Mobile Application by React Native Expo (TypeScript)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+แอปพลิเคชันสำหรับจัดการรายการซื้อของร่วมกันภายในครอบครัว ช่วยให้การวางแผนซื้อของสะดวกรวดเร็วและเป็นระบบมากขึ้น
 
-## Get started
+---
 
-1. Install dependencies
+## 📸 Screenshots
 
-   ```bash
-   npm install
-   ```
+### 🚀 Getting Started & Add Item
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/db648311-ece7-47cc-9666-b7eece8f503b" width="23%" />
+  <img src="https://github.com/user-attachments/assets/a32d8151-cf36-4133-807a-e7a5861ea9c7" width="23%" />
+  <img src="https://github.com/user-attachments/assets/5ae7d7ca-50b7-4443-857d-01d84167a385" width="23%" />
+  <img src="https://github.com/user-attachments/assets/3b25cc15-70c6-4488-b889-c05214092886" width="23%" />
+</p>
 
-2. Start the app
+### 🌙 Dark Mode Experience
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/4b8af880-f92b-4418-8739-c2bc65015000" width="31%" />
+  <img src="https://github.com/user-attachments/assets/1b05970c-b05d-4314-b17b-ae90345b2c14" width="31%" />
+</p>
 
-   ```bash
-   npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## ✨ Features
+* **Family Sync:** สร้างกลุ่มครอบครัวหรือเข้าร่วมผ่าน Access Code เพื่อแชร์รายการร่วมกัน
+* **Smart Filter:** แยกหมวดหมู่ตามความถี่การซื้อ (One-time, Weekly, Monthly)
+* **Quantity Control:** ปุ่มปรับจำนวนสินค้า (+/-) ที่ออกแบบมาให้กดง่าย
+* **Theming:** รองรับทั้ง Light Mode และ Dark Mode เพื่อความสบายตาในการใช้งาน
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## 🛠 Tech Stack
+* **Frontend:** React Native Expo (TypeScript)
+* **Backend:** Supabase (Real-time Database)
+* **Navigation:** Expo Router
+* **Styling:** Custom Theme System
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+---
