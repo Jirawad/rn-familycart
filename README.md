@@ -7,12 +7,15 @@
 
 ## 📸 Screenshots
 
-### 🚀 Getting Started & Add Item
+### 🚀 Getting Started & Add Item & Family
 <p align="center">
   <img src="https://github.com/user-attachments/assets/db648311-ece7-47cc-9666-b7eece8f503b" width="23%" />
   <img src="https://github.com/user-attachments/assets/a32d8151-cf36-4133-807a-e7a5861ea9c7" width="23%" />
   <img src="https://github.com/user-attachments/assets/5ae7d7ca-50b7-4443-857d-01d84167a385" width="23%" />
   <img src="https://github.com/user-attachments/assets/3b25cc15-70c6-4488-b889-c05214092886" width="23%" />
+  <img src="https://github.com/user-attachments/assets/bf67e40e-ada6-44fd-bc7c-1fd3356b3885" width="23%" />
+  <img src="https://github.com/user-attachments/assets/a09ea12e-1fd8-47c0-94af-3f86ce3c7277" width="23%" />
+
 </p>
 
 ### 🌙 Dark Mode Experience
