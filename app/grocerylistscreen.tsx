@@ -30,6 +30,7 @@ export default function GroceryListScreen() {
     loading = false,
     refreshItems,
     memberName = "User",
+    familyGroup, // ดึงข้อมูลกลุ่มมาแสดงรหัส
     setFamilyGroup,
     setMemberName,
     isDarkMode = false,
@@ -61,7 +62,6 @@ export default function GroceryListScreen() {
     }
   };
 
-  // ✅ ฟังก์ชันลบรายการ (ทำงานเมื่อกดถังขยะใน Card)
   const handleDelete = (item: GroceryItem) => {
     Alert.alert("Delete Item", `Remove "${item.name}"?`, [
       { text: "Cancel", style: "cancel" },
@@ -95,23 +95,18 @@ export default function GroceryListScreen() {
     ]);
   };
 
-  // ✅ Logic กรองหมวดหมู่แบบแม่นยำ
   const filteredItems = useMemo(() => {
     if (!Array.isArray(items)) return [];
     return items.filter((item) => {
       if (!item) return false;
-
       const matchesSearch = (item.name?.toLowerCase() || "").includes(
         search.toLowerCase(),
       );
-
       const matchesStatus =
         filterStatus === "all" || item.status === filterStatus;
-
       const itemFreq = item.frequency?.toLowerCase() || "";
       const selectedFreq = filterFrequency.toLowerCase();
       const matchesFreq = selectedFreq === "all" || itemFreq === selectedFreq;
-
       return matchesSearch && matchesStatus && matchesFreq;
     });
   }, [items, search, filterStatus, filterFrequency]);
@@ -278,17 +273,33 @@ export default function GroceryListScreen() {
         ]}
       >
         <View style={{ flex: 1 }}>
-          <Text style={[styles.greeting, { color: theme.text }]}>
-            Hello, {memberName}!
-          </Text>
-          <Text style={[styles.subtitle, { color: theme.textSecondary }]}>
-            {pendingCount === 0
-              ? "All done! 🎉"
-              : `${pendingCount} items to grab`}
-          </Text>
+          <TouchableOpacity
+            onPress={() => router.push("/familymembers" as any)}
+          >
+            <Text style={[styles.greeting, { color: theme.text }]}>
+              Hello, {memberName}!
+            </Text>
+            <View style={styles.familyTag}>
+              <Ionicons name="people" size={12} color={theme.primary} />
+              <Text style={[styles.familyCode, { color: theme.primary }]}>
+                Group: {familyGroup?.access_code}
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.headerActions}>
+          {/* ปุ่มไปหน้าสรุปค่าใช้จ่าย */}
+          <TouchableOpacity
+            style={[
+              styles.iconBtn,
+              { backgroundColor: isDarkMode ? "#1A2E35" : "#F0F9FF" },
+            ]}
+            onPress={() => router.push("/graphscreen" as any)}
+          >
+            <Ionicons name="bar-chart" size={20} color="#0077B6" />
+          </TouchableOpacity>
+
           <TouchableOpacity
             style={[
               styles.iconBtn,
@@ -365,11 +376,13 @@ const styles = StyleSheet.create({
     fontFamily: Typography.fontFamily.bold,
     fontSize: Typography.sizes.xl,
   },
-  subtitle: {
-    fontFamily: Typography.fontFamily.regular,
-    fontSize: Typography.sizes.sm,
+  familyTag: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
     marginTop: 2,
   },
+  familyCode: { fontFamily: Typography.fontFamily.medium, fontSize: 12 },
   iconBtn: {
     width: 40,
     height: 40,

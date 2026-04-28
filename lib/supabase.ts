@@ -1,16 +1,14 @@
 // src/lib/supabase.ts
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createClient } from "@supabase/supabase-js";
-import { Platform } from "react-native"; // เพิ่มตัวนี้เข้ามาเช็กระบบ
+import { Platform } from "react-native";
 import "react-native-url-polyfill/auto";
 
 const SUPABASE_URL = "https://cxwpdyitvhydjnkweeiy.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_vdOSTShi2wuOGz8A_iMBww_R6EQH_ub";
 
-// แก้ไขส่วนสร้าง Client เพื่อรองรับ Web
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
-    // ถ้าเป็นเว็บให้ใช้ localStorage ของ Browser ถ้าเป็นมือถือให้ใช้ AsyncStorage
     storage:
       Platform.OS === "web"
         ? typeof window !== "undefined"
@@ -29,29 +27,55 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
 
 export const familyGroupService = {
   /**
-   * Join an existing family group using access code
+   * เข้าร่วมกลุ่มและบันทึกชื่อลง family_members
    */
-  async joinByCode(accessCode: string) {
-    const { data, error } = await supabase
+  async joinByCode(accessCode: string, memberName: string) {
+    // 1. ตรวจสอบว่ากลุ่มมีจริงไหม
+    const { data: group, error: groupError } = await supabase
       .from("family_groups")
       .select("*")
       .eq("access_code", accessCode.toUpperCase().trim())
       .single();
 
-    return { data, error };
+    if (groupError || !group) return { data: null, error: groupError };
+
+    // บันทึกชื่อคนจอยลงตารางสมาชิก
+    const { error: memberError } = await supabase
+      .from("family_members")
+      .insert([
+        {
+          family_group_id: group.id,
+          name: memberName,
+        },
+      ]);
+
+    return { data: group, error: memberError };
   },
 
   /**
-   * Create a new family group
+   *สร้างกลุ่มและบันทึกชื่อผู้สร้างเป็นสมาชิกคนแรก
    */
-  async create(name: string, accessCode: string) {
-    const { data, error } = await supabase
+  async create(name: string, accessCode: string, memberName: string) {
+    // 1. สร้างกลุ่ม
+    const { data: group, error: groupError } = await supabase
       .from("family_groups")
       .insert([{ name, access_code: accessCode.toUpperCase().trim() }])
       .select()
       .single();
 
-    return { data, error };
+    if (groupError || !group) return { data: null, error: groupError };
+
+    // บันทึกชื่อผู้สร้างลงตารางสมาชิก
+    const { error: memberError } = await supabase
+      .from("family_members")
+      .insert([
+        {
+          family_group_id: group.id,
+          name: memberName,
+        },
+      ]);
+
+    return { data: group, error: memberError };
   },
 };
 
@@ -60,9 +84,6 @@ export const familyGroupService = {
 // ============================================================
 
 export const groceryService = {
-  /**
-   * Fetch all items for a family group
-   */
   async getItems(familyGroupId: string) {
     const { data, error } = await supabase
       .from("grocery_items")
@@ -74,8 +95,18 @@ export const groceryService = {
   },
 
   /**
-   * Add a new grocery item
+   * ดึงรายชื่อสมาชิกจากตาราง family_members โดยตรง
    */
+  async getFamilyMembers(familyGroupId: string) {
+    const { data, error } = await supabase
+      .from("family_members")
+      .select("*")
+      .eq("family_group_id", familyGroupId)
+      .order("created_at", { ascending: true });
+
+    return { data, error };
+  },
+
   async addItem(item: {
     family_group_id: string;
     name: string;
@@ -95,25 +126,7 @@ export const groceryService = {
     return { data, error };
   },
 
-  /**
-   * Update an existing grocery item
-   */
-  async updateItem(
-    id: string,
-    updates: Partial<{
-      name: string;
-      category: string;
-      quantity: number;
-      unit: string;
-      frequency: string;
-      current_price: number;
-      previous_price: number;
-      status: string;
-      notes: string;
-      purchased_at: string;
-      purchased_by: string;
-    }>,
-  ) {
+  async updateItem(id: string, updates: any) {
     const { data, error } = await supabase
       .from("grocery_items")
       .update(updates)
@@ -124,9 +137,6 @@ export const groceryService = {
     return { data, error };
   },
 
-  /**
-   * Toggle item purchase status
-   */
   async toggleStatus(
     id: string,
     currentStatus: string,
@@ -141,34 +151,16 @@ export const groceryService = {
     };
 
     if (isPurchasing && newPrice !== undefined) {
-      // Get current price to save as previous
       const { data: currentItem } = await supabase
         .from("grocery_items")
         .select("current_price")
         .eq("id", id)
         .single();
 
-      if (
-        currentItem?.current_price !== undefined &&
-        currentItem?.current_price !== null
-      ) {
+      if (currentItem?.current_price) {
         updates.previous_price = currentItem.current_price;
       }
-
       updates.current_price = newPrice;
-
-      // Record price history
-      try {
-        await supabase.from("price_history").insert([
-          {
-            item_id: id,
-            price: newPrice,
-            recorded_by: memberName,
-          },
-        ]);
-      } catch (e) {
-        console.log("Price history table might not exist, skipping...");
-      }
     }
 
     const { data, error } = await supabase
@@ -181,9 +173,6 @@ export const groceryService = {
     return { data, error };
   },
 
-  /**
-   * Delete a grocery item
-   */
   async deleteItem(id: string) {
     const { error } = await supabase
       .from("grocery_items")
@@ -193,9 +182,6 @@ export const groceryService = {
     return { error };
   },
 
-  /**
-   * Get price history for an item
-   */
   async getPriceHistory(itemId: string) {
     const { data, error } = await supabase
       .from("price_history")
@@ -206,9 +192,6 @@ export const groceryService = {
     return { data, error };
   },
 
-  /**
-   * Subscribe to real-time changes
-   */
   subscribeToItems(
     familyGroupId: string,
     callback: (payload: unknown) => void,

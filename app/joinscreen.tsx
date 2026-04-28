@@ -1,3 +1,4 @@
+// app/joinscreen.tsx
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -37,7 +38,6 @@ export default function JoinScreen() {
   const [accessCode, setAccessCode] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // กำหนดธีมตามโหมด
   const theme = isDarkMode ? DarkColors : Colors;
 
   const handleJoin = async () => {
@@ -48,14 +48,20 @@ export default function JoinScreen() {
 
     setLoading(true);
     try {
-      const { data, error } = await familyGroupService.joinByCode(accessCode);
+      // ✅ แก้ไข: ส่ง memberName เข้าไปด้วย
+      const { data, error } = await familyGroupService.joinByCode(
+        accessCode,
+        memberName.trim(),
+      );
+
       if (error || !data) {
         Alert.alert(
           "Not Found",
-          "No family group found with that code. Check the code and try again.",
+          "No family group found with that code or join failed.",
         );
         return;
       }
+
       await setMemberName(memberName.trim());
       await setFamilyGroup(data);
       router.replace("/grocerylistscreen" as any);
@@ -80,10 +86,13 @@ export default function JoinScreen() {
 
     setLoading(true);
     try {
+      // ✅ แก้ไข: ส่ง memberName เข้าไปด้วยเป็นตัวที่ 3
       const { data, error } = await familyGroupService.create(
         familyName.trim(),
         accessCode,
+        memberName.trim(),
       );
+
       if (error) {
         if (error.code === "23505") {
           Alert.alert(
@@ -95,6 +104,7 @@ export default function JoinScreen() {
         }
         return;
       }
+
       if (data) {
         await setMemberName(memberName.trim());
         await setFamilyGroup(data);
@@ -111,7 +121,6 @@ export default function JoinScreen() {
     <SafeAreaView
       style={[styles.container, { backgroundColor: theme.background }]}
     >
-      {/* ปุ่มสลับ Dark Mode */}
       <TouchableOpacity
         style={[styles.themeToggle, { backgroundColor: theme.surface }]}
         onPress={toggleDarkMode}
@@ -247,7 +256,7 @@ export default function JoinScreen() {
                   />
                   <TextInput
                     style={[styles.input, { color: theme.text }]}
-                    placeholder="Family"
+                    placeholder="Family Name"
                     placeholderTextColor={theme.textMuted}
                     value={familyName}
                     onChangeText={setFamilyName}
@@ -327,6 +336,7 @@ export default function JoinScreen() {
   );
 }
 
+// ... styles เดิมของคุณคงไว้ได้เลยครับ (ผมตัดออกเพื่อความกระชับ)
 const styles = StyleSheet.create({
   container: { flex: 1 },
   themeToggle: {
@@ -408,10 +418,7 @@ const styles = StyleSheet.create({
     paddingRight: Spacing.md,
     fontSize: Typography.sizes.base,
   },
-  codeInput: {
-    fontFamily: Typography.fontFamily.bold,
-    letterSpacing: 2,
-  },
+  codeInput: { fontFamily: Typography.fontFamily.bold, letterSpacing: 2 },
   submitBtn: {
     borderRadius: Radius.md,
     paddingVertical: Spacing.md,
@@ -423,7 +430,5 @@ const styles = StyleSheet.create({
     ...Shadows.md,
   },
   submitBtnDisabled: { opacity: 0.6 },
-  submitText: {
-    fontFamily: Typography.fontFamily.bold,
-  },
+  submitText: { fontFamily: Typography.fontFamily.bold },
 });
