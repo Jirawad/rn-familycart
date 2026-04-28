@@ -36,4 +36,3 @@
 * **Styling:** Custom Theme System
 
 ---
-**Developed by Jirawad Sadjayat**
